@@ -1,0 +1,177 @@
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.7.0 <0.9.0;
+import "hardhat/console.sol";
+contract Oil_Gas
+{
+//Class Variables
+string public Contract_Status;
+string Country_Speci_Bus_Regu_Law;
+string Certifications;
+string Country_Speci_sec_Regu_Law ;
+bool public Reg_Approval;
+
+constructor() public { 
+       
+	Country_Speci_Bus_Regu_Law = "yes";
+	Certifications = "yes";
+	Country_Speci_sec_Regu_Law = "yes";
+	Reg_Approval = false;
+}
+
+struct Contract
+{
+	string Oper_Cont_status;
+	string OFS_Cont_status;
+	string Equip_Cont_status;
+}
+     
+struct Operator_Details 
+{
+            string Name;
+            string Work_Name;
+            string Location;
+            int256 Duration;
+            int256 Assets;
+            string Deliverables;
+            string Compl_Cert;
+            string Terms_Conditions;
+            uint256 Commercial;
+ 
+}
+    struct OFS_Details
+ {
+            string Name;
+            string Location;
+            string Scope_of_Work;
+            string Milestones;
+            string Timelines;
+            string Acceptance_Criteria;
+            string Terms_Conditions;
+            uint256 Commercial;
+ }
+
+  struct Equip_Supplier_Details
+ {
+            string Name;
+            string Location;
+            string Scope_of_Work;
+            string Milestones;
+            string Timelines;
+            string Acceptance_Criteria;
+            string Terms_Conditions;
+            uint256 Commercial;
+            string Equi_stat;
+ }
+
+ function Check_Reg_Approval() public returns(bool)
+    {
+        //Reg_Approval = temp_bool;
+        string memory s1 = "yes";
+
+        if((keccak256(abi.encodePacked(Country_Speci_Bus_Regu_Law)) == keccak256(abi.encodePacked(s1))))
+        {Reg_Approval = true;} else {Reg_Approval=false;}
+
+        return(Reg_Approval);
+    }
+    function Set_Country_Bus_Approval(string memory temp_s) public returns(string memory)
+    {
+        Country_Speci_Bus_Regu_Law = temp_s;
+        return(Country_Speci_Bus_Regu_Law);
+    }
+ 
+
+ function Set_Reg_Approval(bool temp_bool) public returns(bool)
+    {
+        Reg_Approval = temp_bool;
+        return(Reg_Approval);
+    }
+  function Operator() public returns( string memory str_temp)
+    { 
+       if ((Reg_Approval))
+       {
+            Contract memory _C;
+              //Operation Details
+              Operator_Details memory  _OD;
+              console.log("*********Operator details**********");
+              _OD.Name = "Reliance";
+              _OD.Location = "Hyderabad";
+                _OD.Duration = 1;
+              _OD.Assets = 200;
+               _OD.Deliverables = "multiple";
+               _OD.Compl_Cert= "yes";
+               _C.Oper_Cont_status= "Operator_approved";
+                Contract_Status =_C.Oper_Cont_status;
+            //Reg_Approval = true;
+          }
+           else
+           {  
+             Reg_Approval = false;
+             Contract_Status = "Oper_Not approved";     
+            }
+	          return(Contract_Status);
+    }
+
+   function OFS() public returns(string memory _CS) 
+    { 
+    Contract memory _C;
+    string memory s1 ="Operator_approved";
+    string memory s2 = Contract_Status;
+     if((keccak256(abi.encodePacked(s2)) == keccak256(abi.encodePacked(s1))))
+	{
+	  OFS_Details memory _ofs;
+    console.log("*********OFS details**********");
+	 _ofs.Name= "Reliance";
+   _ofs.Location = "Hyderabad";
+      _ofs.Scope_of_Work = "multiple";
+        _ofs.Milestones = "multiple";
+       _ofs.Timelines = "multiple";
+        _ofs.Acceptance_Criteria = "2 lakh tonnes";
+        
+        _ofs.Terms_Conditions = "Fine print";
+        _C.OFS_Cont_status = "OFS_approved";
+        console.log(_ofs.Location);
+      Contract_Status = _C.OFS_Cont_status;
+	}
+  else { Contract_Status = "OFS_Not_Approved"; } 
+   return(Contract_Status);
+   }
+		
+	function  Equip_Supplier() public returns(string memory Operator_Status)
+    { 
+	  string memory s1 ="OFS_approved";
+    string memory s2 = Contract_Status;
+
+      if((keccak256(abi.encodePacked(s2)) == keccak256(abi.encodePacked(s1))))
+      {
+	      Equip_Supplier_Details memory _Equi_Supp;
+        console.log("*********Equi_Supp details**********");
+	       _Equi_Supp.Name="Reliance";
+        _Equi_Supp.Location = "Hyderabad";
+        _Equi_Supp.Scope_of_Work = "multiple";
+        _Equi_Supp.Milestones = "multiple";
+       _Equi_Supp.Timelines = "multiple";
+        _Equi_Supp.Acceptance_Criteria = "2 lakh tonnes";
+        _Equi_Supp.Terms_Conditions = "Fine print";
+        console.log(_Equi_Supp.Timelines);
+	  _Equi_Supp.Equi_stat= "Equi_Approved";
+		Contract_Status = _Equi_Supp.Equi_stat;
+      } else { Contract_Status = "Equi_Not_Approved"; } 
+     
+	return(Contract_Status);
+}
+   // Create a new Agreement for a proposal.
+      function Create_Agreement() public returns(string memory Final_Agreement )
+    {
+       string memory s1 ="Equi_Approved";
+       string memory s2 = Contract_Status;
+
+      if((keccak256(abi.encodePacked(s2)) == keccak256(abi.encodePacked(s1))))
+      {
+	  	       Contract_Status = "Succesfully created final agreement";
+    	}
+      else {Contract_Status = "Failed to create Agreement";}
+      
+       return(Contract_Status);
+           
+    }
+}
